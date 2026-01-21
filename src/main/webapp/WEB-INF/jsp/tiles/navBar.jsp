@@ -27,11 +27,6 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#">발주기관</a>
                 </li>
-
-                <!-- 테스트용 -->
-                <li class="nav-item">
-                    <a class="nav-link" href="<c:url value='/login/list.do'/>">회원(테스트)</a>
-                </li>
             </ul>
         </div>
     </div>
