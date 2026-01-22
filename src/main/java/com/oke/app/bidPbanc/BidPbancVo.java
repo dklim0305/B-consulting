@@ -73,4 +73,6 @@ public class BidPbancVo extends PaginationInfo{
     private String searchBidClseDate;               // 입찰마감일자
     private String minPrce;                         // 최소 추정가격
     private String maxPrce;                         // 최대 추정가격
+
+    private String rnum;
 }
