@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="orderInst">
+
+    <!-- 발주기관 목록갯수조회 -->
+    <select id="retrieveOrderInstListCnt" parameterType="com.oke.app.orderInst.OrderInstVo" resultType="int">
+        SELECT COUNT(*)
+        FROM PORTAL.INST_CD
+        WHERE 1 = 1
+        AND TYPEBIG_NM != 'null'
+        <if test="typebigNmList != null and typebigNmList.size() > 0">
+            AND TYPEBIG_NM IN
+            <foreach item="typebigNm" collection="typebigNmList" open="(" separator="," close=")">
+                #{typebigNm}
+            </foreach>
+        </if>
+        <if test="fullNm != null and fullNm != ''">
+            AND FULL_NM LIKE '%' ||  #{fullNm} || '%'
+        </if>
+    </select>
+
+    <!-- 발주기관 목록조회-->
+    <select id="retrieveOrderInstList" parameterType="com.oke.app.orderInst.OrderInstVo" resultType="com.oke.app.orderInst.OrderInstVo">
+        SELECT *
+        FROM (
+            SELECT *
+                 , ROW_NUMBER() OVER() AS RNUM
+            FROM (
+                SELECT ORG_CD
+                     , FULL_NM
+                     , LOW_NM
+                     , ABBR_NM
+                     , GAP_NO
+                     , RANK_NO
+                     , SUB_CHASU
+                     , HIGH_CD
+                     , HIGHST_CD
+                     , REP_CD
+                     , CASE WHEN TYPEBIG_NM IS NULL THEN '' ELSE TYPEBIG_NM END AS TYPEBIG_NM
+                     , CASE WHEN TYPEMID_NM IS NULL THEN '' ELSE TYPEMID_NM END AS TYPEMID_NM
+                     , CASE WHEN TYPESML_NM IS NULL THEN '' ELSE TYPESML_NM END AS TYPESML_NM
+                     , LOCATSTD_CD
+                     , (SELECT LOCATADD_NM FROM PORTAL.STDG_CD WHERE LOCATSTD_CD = REGION_CD ) AS LOCATSTD_NM
+                     , USE_CD
+                     , CRT_DE
+                     , CLS_DE
+                     , STOP_SELT
+                     , CHG_DE
+                     , BASE_DATE
+                     , ADPT_DATE
+                     , PREORG_CD
+                FROM PORTAL.INST_CD
+                WHERE 1 = 1
+                AND TYPEBIG_NM != 'null'
+                <if test="typebigNmList != null and typebigNmList.size() > 0">
+                    AND TYPEBIG_NM IN
+                    <foreach item="typebigNm" collection="typebigNmList" open="(" separator="," close=")">
+                        #{typebigNm}
+                    </foreach>
+                </if>
+                <if test="fullNm != null and fullNm != ''">
+                    AND FULL_NM LIKE '%' ||  #{fullNm} || '%'
+                </if>
+                <choose>
+                    <when test="sortStandard == 'fullNm'">
+                        ORDER BY full_nm COLLATE "ko-KR-x-icu"
+                    </when>
+                    <when test="sortStandard == 'typebigNm'">
+                        ORDER BY typebig_nm COLLATE "ko-KR-x-icu"
+                    </when>
+                    <otherwise>
+                        ORDER BY full_nm COLLATE "ko-KR-x-icu"
+                    </otherwise>
+                </choose>
+                <choose>
+                    <when test="sortOrder == 'ASC'">
+                        ASC
+                    </when>
+                    <when test="sortOrder == 'DESC'">
+                        DESC
+                    </when>
+                    <otherwise>
+                        ASC
+                    </otherwise>
+                </choose>
+                ) T1
+            ) T2
+        WHERE 1=1
+        <if test="firstRecordIndex >= 0 and lastRecordIndex > 0">
+            AND RNUM <![CDATA[>]]> #{firstRecordIndex} AND RNUM <![CDATA[<=]]> #{lastRecordIndex}
+        </if>
+    </select>
+
+    <!-- 발주기관 분류 조회 -->
+    <select id="retrieveOrderInstClsf" resultType="com.oke.app.orderInst.OrderInstVo">
+        SELECT TYPEBIG_NM
+        FROM PORTAL.INST_CD
+        WHERE 1=1
+        AND TYPEBIG_NM != 'null'
+        GROUP BY TYPEBIG_NM
+    </select>
+
+    <!-- 발주기관 상세조회 -->
+    <select id="retrieveOrderInstDetail" parameterType="com.oke.app.orderInst.OrderInstVo" resultType="com.oke.app.orderInst.OrderInstVo">
+        SELECT ORG_CD
+             , FULL_NM
+             , LOW_NM
+             , ABBR_NM
+             , GAP_NO
+             , RANK_NO
+             , SUB_CHASU
+             , HIGH_CD
+             , HIGHST_CD
+             , REP_CD
+             , CASE WHEN TYPEBIG_NM IS NULL THEN '' ELSE TYPEBIG_NM END AS TYPEBIG_NM
+             , CASE WHEN TYPEMID_NM IS NULL THEN '' ELSE TYPEMID_NM END AS TYPEMID_NM
+             , CASE WHEN TYPESML_NM IS NULL THEN '' ELSE TYPESML_NM END AS TYPESML_NM
+             , LOCATSTD_CD
+             , (SELECT LOCATADD_NM FROM PORTAL.STDG_CD WHERE LOCATSTD_CD = REGION_CD ) AS LOCATSTD_NM
+             , USE_CD
+             , CRT_DE
+             , CLS_DE
+             , STOP_SELT
+             , CHG_DE
+             , BASE_DATE
+             , ADPT_DATE
+             , PREORG_CD
+        FROM PORTAL.INST_CD
+        WHERE 1=1
+        <if test="orgCd != null and orgCd != ''">
+            AND ORG_CD LIKE '%' ||  #{orgCd} || '%'
+        </if>
+    </select>
+
+    <!-- 발주 공고 목록갯수조회 -->
+    <select id="retrieveOrderPbancListCnt" parameterType="com.oke.app.orderInst.OrderInstVo" resultType="int">
+        SELECT COUNT(*)
+        FROM PORTAL.BID_PBANC_INFO
+        WHERE 1=1
+          AND DMND_INSTT_CD = #{orgCd}
+    </select>
+
+    <!-- 발주 공고 목록조회 -->
+    <select id="retrieveOrderPbancList" parameterType="com.oke.app.orderInst.OrderInstVo" resultType="com.oke.app.bidPbanc.BidPbancVo">
+        SELECT *
+        FROM (
+            SELECT *
+                 , ROW_NUMBER() OVER() AS RNUM
+            FROM (
+                SELECT BID_NTCE_NO
+                     , BID_NTCE_ORD
+                     , REF_NTCE_NO
+                     , REF_NTCE_ORD
+                     , PPS_NTCE_YN
+                     , BID_NTCE_NM
+                     , BID_NTCE_STTUS_NM
+                     , BID_NTCE_DATE
+                     , BID_NTCE_BGN
+                     , BSNS_DIV_NM
+                     , INTRNTNL_BID_YN
+                     , CMMN_CNTRCT_YN
+                     , CMMN_RECIPT_METHD_NM
+                     , ELCTRN_BID_YN
+                     , CNTRCT_CNCLS_STTUS_NM
+                     , CNTRCT_CNCLS_MTHD_NM
+                     , BIDWINR_DCSN_MTHD_NM
+                     , NTCE_INSTT_NM
+                     , NTCE_INSTT_CD
+                     , NTCE_INSTT_OFCL_DEPT_NM
+                     , NTCE_INSTT_OFCL_NM
+                     , NTCE_INSTT_OFCL_TEL
+                     , NTCE_INSTT_OFCL_EMAIL_ADRS
+                     , DMND_INSTT_NM
+                     , DMND_INSTT_CD
+                     , DMND_INSTT_OFCL_DEPT_NM
+                     , DMND_INSTT_OFCL_NM
+                     , DMND_INSTT_OFCL_TEL
+                     , DMND_INSTT_OFCL_EMAIL_ADRS
+                     , PRESNATN_OPRTN_YN
+                     , PRESNATN_OPRTN_DATE
+                     , PRESNATN_OPRTN_TM
+                     , PRESNATN_OPRTN_PLCE
+                     , BID_PRTCPT_QLFCT_RGST_CLSE_DATE
+                     , BID_PRTCPT_QLFCT_RGST_CLSE_TM
+                     , CMMN_RECIPT_AGRMNT_CLSE_DATE
+                     , CMMN_RECIPT_AGRMNT_CLSE_TM
+                     , BID_BEGIN_DATE
+                     , BID_BEGIN_TM
+                     , BID_CLSE_DATE
+                     , BID_CLSE_TM
+                     , OPENG_DATE
+                     , OPENG_TM
+                     , OPENG_PLCE
+                     , ASIGN_BDGT_AMT
+                     , PRESMPT_PRCE
+                     , RSRVTN_PRCE_DCSN_MTHD_NM
+                     , RGN_LMT_YN
+                     , PRTCPT_PSBL_RGN_NM
+                     , INDSTRYTY_LMT_YN
+                     , BIDPRC_PSBL_INDSTRYTY_NM
+                     , BID_NTCE_URL
+                     , DATA_BSS_DATE
+                     , DEL_YN
+                     , FRST_RGSR_ID
+                     , FRST_RGSR_DTL_DTTM
+                     , LAST_CHNG_ID
+                     , LAST_CHNG_DTL_DTTM
+                FROM PORTAL.BID_PBANC_INFO
+                WHERE 1 = 1
+                AND DMND_INSTT_CD = #{orgCd}
+                ORDER BY BID_NTCE_DATE DESC, BID_NTCE_BGN DESC
+            ) T1
+        ) T2
+        WHERE 1=1
+        <if test="firstRecordIndex >= 0 and lastRecordIndex > 0">
+            AND RNUM <![CDATA[>]]> #{firstRecordIndex} AND RNUM <![CDATA[<=]]> #{lastRecordIndex}
+        </if>
+    </select>
+</mapper>
