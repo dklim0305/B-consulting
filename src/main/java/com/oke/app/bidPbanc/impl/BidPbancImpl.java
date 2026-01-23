@@ -5,8 +5,8 @@ import com.oke.app.bidPbanc.BidPbancSvc;
 import com.oke.app.bidPbanc.BidPbancVo;
 import org.springframework.stereotype.Service;
 
-
 import javax.annotation.Resource;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service("bidPbancSvc")
@@ -28,5 +28,36 @@ public class BidPbancImpl implements BidPbancSvc {
     @Override
     public BidPbancVo retrieveBidPbancInfoDetail(BidPbancVo bidPbancVo) {
         return dao.selectOne("bidPbanc.retrieveBidPbancInfoDetail", bidPbancVo);
+    }
+
+    @Override
+    public List<BidPbancVo> processBidPbancList(BidPbancVo bidPbancVo) {
+
+        // 날짜 기본값 설정
+        if (bidPbancVo.getSearchBidBeginDate() == null || bidPbancVo.getSearchBidBeginDate().isEmpty()) {
+            LocalDate today = LocalDate.now();
+            LocalDate oneMonthAgo = today.minusMonths(1);
+
+            bidPbancVo.setSearchBidBeginDate(oneMonthAgo.toString());
+            bidPbancVo.setSearchBidClseDate(today.toString());
+        }
+
+        // 페이징 기본값 설정
+        if (bidPbancVo.getCurrentPageNo() == 0) {
+            bidPbancVo.setCurrentPageNo(1);
+        }
+
+        if (bidPbancVo.getRecordCountPerPage() == 0) {
+            bidPbancVo.setRecordCountPerPage(10);
+        }
+
+        bidPbancVo.setPageSize(10);
+
+        // 목록 갯수 조회
+        int listCnt = retrieveBidPbancInfoListCnt(bidPbancVo);
+        bidPbancVo.setTotalRecordCount(listCnt);
+
+        // 목록 조회 및 반환
+        return retrieveBidPbancInfoList(bidPbancVo);
     }
 }
