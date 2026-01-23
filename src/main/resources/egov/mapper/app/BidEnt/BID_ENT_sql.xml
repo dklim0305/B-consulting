@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="bidEnt">
+
+    <!-- 입찰기업 목록갯수조회 -->
+    <select id="retrieveBidEntListCnt" parameterType="com.oke.app.bidEnt.BidEntVo" resultType="int">
+        SELECT COUNT(*)
+        FROM PORTAL.ENT_OVRVW
+        WHERE 1=1
+        <if test="corpName != null and corpName != ''">
+            AND CORP_NAME LIKE '%' || #{corpName} || '%'
+        </if>
+        <if test="ceoNm != null and ceoNm != ''">
+            AND CEO_NM LIKE '%' || #{ceoNm} || '%'
+        </if>
+        <if test="bizrNo != null and bizrNo != ''">
+            AND BIZR_NO LIKE '%' || #{bizrNo} || '%'
+        </if>
+    </select>
+
+    <!-- 입찰기업 목록조회 -->
+    <select id="retrieveBidEntList" parameterType="com.oke.app.bidEnt.BidEntVo" resultType="com.oke.app.bidEnt.BidEntVo">
+        SELECT *
+        FROM (
+            SELECT *
+                 , ROW_NUMBER() OVER() AS RNUM
+            FROM (
+                SELECT CORP_NAME
+                     , CORP_NAME_ENG
+                     , STOCK_NAME
+                     , STOCK_CODE
+                     , CEO_NM
+                     , CORP_CLS
+                     , JURIR_NO
+                     , BIZR_NO
+                     , ADRES
+                     , HM_URL
+                     , IR_URL
+                     , PHN_NO
+                     , FAX_NO
+                     , INDUTY_CODE
+                     , EST_DT
+                     , ACC_MT
+                     , DEL_YN
+                     , FRST_RGSR_ID
+                     , FRST_RGSR_DTL_DTTM
+                     , LAST_CHNG_ID
+                     , LAST_CHNG_DTL_DTTM
+                     , CORP_CODE
+                FROM PORTAL.ENT_OVRVW
+                WHERE 1 = 1
+                <if test="corpName != null and corpName != ''">
+                    AND CORP_NAME LIKE '%' || #{corpName} || '%'
+                </if>
+                <if test="ceoNm != null and ceoNm != ''">
+                    AND CEO_NM LIKE '%' || #{ceoNm} || '%'
+                </if>
+                <if test="bizrNo != null and bizrNo != ''">
+                    AND BIZR_NO LIKE '%' || #{bizrNo} || '%'
+                </if>
+                <choose>
+                    <when test="sortStandard == 'corpName'">
+                        ORDER BY CORP_NAME COLLATE "ko-KR-x-icu"
+                    </when>
+                    <otherwise>
+                        ORDER BY CORP_NAME COLLATE "ko-KR-x-icu"
+                    </otherwise>
+                </choose>
+                <choose>
+                    <when test="sortOrder == 'ASC'">
+                        ASC
+                    </when>
+                    <when test="sortOrder == 'DESC'">
+                        DESC
+                    </when>
+                    <otherwise>
+                        ASC
+                    </otherwise>
+                </choose>
+            ) T1
+        ) T2
+        WHERE 1=1
+        <if test="firstRecordIndex >= 0 and lastRecordIndex > 0">
+            AND RNUM <![CDATA[>]]> #{firstRecordIndex} AND RNUM <![CDATA[<=]]> #{lastRecordIndex}
+        </if>
+    </select>
+
+    <select id="retrieveBidEntDetail" parameterType="com.oke.app.bidEnt.BidEntVo" resultType="com.oke.app.bidEnt.BidEntVo">
+        SELECT CORP_NAME
+             , CORP_NAME_ENG
+             , STOCK_NAME
+             , STOCK_CODE
+             , CEO_NM
+             , CORP_CLS
+             , JURIR_NO
+             , BIZR_NO
+             , ADRES
+             , HM_URL
+             , IR_URL
+             , PHN_NO
+             , FAX_NO
+             , INDUTY_CODE
+             , EST_DT
+             , ACC_MT
+             , DEL_YN
+             , FRST_RGSR_ID
+             , FRST_RGSR_DTL_DTTM
+             , LAST_CHNG_ID
+             , LAST_CHNG_DTL_DTTM
+             , CORP_CODE
+        FROM PORTAL.ENT_OVRVW
+        WHERE 1=1
+        AND CORP_CODE = #{corpCode}
+    </select>
+
+</mapper>
