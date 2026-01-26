@@ -22,17 +22,6 @@ public class BidPbancImpl implements BidPbancSvc {
 
     @Override
     public List<BidPbancVo> retrieveBidPbancInfoList(BidPbancVo bidPbancVo) {
-        return dao.selectList("bidPbanc.retrieveBidPbancInfoList", bidPbancVo);
-    }
-
-    @Override
-    public BidPbancVo retrieveBidPbancInfoDetail(BidPbancVo bidPbancVo) {
-        return dao.selectOne("bidPbanc.retrieveBidPbancInfoDetail", bidPbancVo);
-    }
-
-    @Override
-    public List<BidPbancVo> processBidPbancList(BidPbancVo bidPbancVo) {
-
         // 날짜 기본값 설정
         if (bidPbancVo.getSearchBidBeginDate() == null || bidPbancVo.getSearchBidBeginDate().isEmpty()) {
             LocalDate today = LocalDate.now();
@@ -58,6 +47,11 @@ public class BidPbancImpl implements BidPbancSvc {
         bidPbancVo.setTotalRecordCount(listCnt);
 
         // 목록 조회 및 반환
-        return retrieveBidPbancInfoList(bidPbancVo);
+        return dao.selectList("bidPbanc.retrieveBidPbancInfoList", bidPbancVo);
+    }
+
+    @Override
+    public BidPbancVo retrieveBidPbancInfoDetail(BidPbancVo bidPbancVo) {
+        return dao.selectOne("bidPbanc.retrieveBidPbancInfoDetail", bidPbancVo);
     }
 }

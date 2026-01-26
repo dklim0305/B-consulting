@@ -12,7 +12,4 @@ public interface BidPbancSvc {
 
     // 입찰공고 상세조회
     BidPbancVo retrieveBidPbancInfoDetail(BidPbancVo bidPbancVo);
-
-    // 입찰공고 목록 처리 (List 반환)
-    List<BidPbancVo> processBidPbancList(BidPbancVo bidPbancVo);
 }

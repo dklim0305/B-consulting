@@ -18,7 +18,7 @@ public class BidPbancCtr {
     public String retrieveBidPbancList(@ModelAttribute BidPbancVo bidPbancVo, Model model) {
 
         // Service에서 처리 후 결과
-        List<BidPbancVo> list = bidPbancSvc.processBidPbancList(bidPbancVo);
+        List<BidPbancVo> list = bidPbancSvc.retrieveBidPbancInfoList(bidPbancVo);
 
         // 결과를 Model로
         model.addAttribute("bidPbancListCnt", bidPbancVo.getTotalRecordCount());
