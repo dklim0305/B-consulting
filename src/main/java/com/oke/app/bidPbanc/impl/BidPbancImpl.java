@@ -22,10 +22,10 @@ public class BidPbancImpl implements BidPbancSvc {
 
     @Override
     public List<BidPbancVo> retrieveBidPbancInfoList(BidPbancVo bidPbancVo) {
-        // 날짜 기본값 설정
+        // 날짜 기본값 설정 (최근 7일)
         if (bidPbancVo.getSearchBidBeginDate() == null || bidPbancVo.getSearchBidBeginDate().isEmpty()) {
             LocalDate today = LocalDate.now();
-            LocalDate oneMonthAgo = today.minusMonths(1);
+            LocalDate oneMonthAgo = today.minusDays(6); // 오늘 포함 7일
 
             bidPbancVo.setSearchBidBeginDate(oneMonthAgo.toString());
             bidPbancVo.setSearchBidClseDate(today.toString());

@@ -2,9 +2,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:formatNumber value="${item.estPrice}" pattern="#,###" />
 
-<script src="http://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script src="/app/js/bidPbanc/bidPbancList.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="<c:url value='/app/js/bidPbanc/bidPbancList.js'/>"></script>
+
 
 <div id="wrapper">
     <div class="header">
@@ -26,9 +30,9 @@
                 <tr>
                     <th>기간</th>
                     <td colspan="3">
-                        <input type="date" id="startDate" name="searchBidBeginDate" value="${bidPbancVo.searchBidBeginDate}" />
+                        <input type="date" id="startDate" name="searchBidBeginDate" value="${bidPbancVo.searchBidBeginDate}" min="2019-01-01" />
                         ~
-                        <input type="date" id="endDate" name="searchBidClseDate" value="${bidPbancVo.searchBidClseDate}" />
+                        <input type="date" id="endDate" name="searchBidClseDate" value="${bidPbancVo.searchBidClseDate}"  min="2019-01-01" />
                         <span class="range-btn-group">
                             <button type="button" class="date_range_btn" data-range="all">전체</button>
                             <button type="button" class="date_range_btn" data-range="0">당일</button>
@@ -50,7 +54,7 @@
                     <th>공고번호</th>
                     <td>
                         <input type="text" id="bidNtceNo" name="bidNtceNo" value="${bidPbancVo.bidNtceNo}"
-                               placeholder="예) R25BK00773169,R25BK00773842" style="width: 90%;" />
+                               placeholder="예) R25BK00773169, R25BK00773842" style="width: 90%;" />
                     </td>
                 </tr>
 
@@ -58,11 +62,22 @@
                 <tr>
                     <th>공고 업무 구분</th>
                     <td>
-                        <label><input type="checkbox" name="bsnsDivNm" value="물품" checked /> 물품</label>
-                        <label><input type="checkbox" name="bsnsDivNm" value="공사" checked /> 공사</label>
-                        <label><input type="checkbox" name="bsnsDivNm" value="용역" checked /> 용역</label>
-                        <label><input type="checkbox" name="bsnsDivNm" value="외자" checked /> 외자</label>
-                        <label><input type="checkbox" name="bsnsDivNm" value="기타" checked /> 기타</label>
+                        <c:set var="bsnsDivArray" value="${paramValues.bsnsDivNm}" />
+                        <label>
+                            <input type="checkbox" name="bsnsDivNm" value="물품" <c:if test="${empty bsnsDivArray or fn:contains(fn:join(bsnsDivArray, ','), '물품')}">checked</c:if> /> 물품
+                        </label>
+                        <label>
+                            <input type="checkbox" name="bsnsDivNm" value="공사" <c:if test="${empty bsnsDivArray or fn:contains(fn:join(bsnsDivArray, ','), '공사')}">checked</c:if> />공사
+                        </label>
+                        <label>
+                            <input type="checkbox" name="bsnsDivNm" value="용역" <c:if test="${empty bsnsDivArray or fn:contains(fn:join(bsnsDivArray, ','), '용역')}">checked</c:if> />용역
+                        </label>
+                        <label>
+                            <input type="checkbox" name="bsnsDivNm" value="외자" <c:if test="${empty bsnsDivArray or fn:contains(fn:join(bsnsDivArray, ','), '외자')}">checked</c:if> />외자
+                        </label>
+                        <label>
+                            <input type="checkbox" name="bsnsDivNm" value="기타" <c:if test="${empty bsnsDivArray or fn:contains(fn:join(bsnsDivArray, ','), '기타')}">checked</c:if> />기타
+                        </label>
                     </td>
                     <th>공고기관명</th>
                     <td>
@@ -75,19 +90,41 @@
                 <tr>
                     <th>계약 방법</th>
                     <td>
-                        <label><input type="checkbox" name="cntrctCnclsMthdNm" value="일반경쟁" checked /> 일반경쟁</label>
-                        <label><input type="checkbox" name="cntrctCnclsMthdNm" value="제한경쟁" checked /> 제한경쟁</label>
-                        <label><input type="checkbox" name="cntrctCnclsMthdNm" value="지명경쟁" checked /> 지명경쟁</label>
-                        <label><input type="checkbox" name="cntrctCnclsMthdNm" value="수의계약" checked /> 수의계약</label>
-                        <label><input type="checkbox" name="cntrctCnclsMthdNm" value="기타" checked /> 기타</label>
+                        <c:set var="cntrctArray" value="${paramValues.cntrctCnclsMthdNm}" />
+                        <label>
+                            <input type="checkbox" name="cntrctCnclsMthdNm" value="일반경쟁" <c:if test="${empty cntrctArray or fn:contains(fn:join(cntrctArray, ','), '일반경쟁')}">checked</c:if> />일반경쟁
+                        </label>
+                        <label>
+                            <input type="checkbox" name="cntrctCnclsMthdNm" value="제한경쟁" <c:if test="${empty cntrctArray or fn:contains(fn:join(cntrctArray, ','), '제한경쟁')}">checked</c:if> />제한경쟁
+                        </label>
+                        <label>
+                            <input type="checkbox" name="cntrctCnclsMthdNm" value="지명경쟁" <c:if test="${empty cntrctArray or fn:contains(fn:join(cntrctArray, ','), '지명경쟁')}">checked</c:if> />지명경쟁
+                        </label>
+                        <label>
+                            <input type="checkbox" name="cntrctCnclsMthdNm" value="수의계약" <c:if test="${empty cntrctArray or fn:contains(fn:join(cntrctArray, ','), '수의계약')}">checked</c:if> />수의계약
+                        </label>
+                        <label>
+                            <input type="checkbox" name="cntrctCnclsMthdNm" value="기타" <c:if test="${empty cntrctArray or fn:contains(fn:join(cntrctArray, ','), '기타')}">checked</c:if> />기타
+                        </label>
                     </td>
                     <th>상태 분류</th>
                     <td>
-                        <label><input type="checkbox" name="bidNtceSttusNm" value="일반공고" checked /> 일반공고</label>
-                        <label><input type="checkbox" name="bidNtceSttusNm" value="긴급공고" checked /> 긴급공고</label>
-                        <label><input type="checkbox" name="bidNtceSttusNm" value="정정공고" checked /> 정정공고</label>
-                        <label><input type="checkbox" name="bidNtceSttusNm" value="취소공고" checked /> 취소공고</label>
-                        <label><input type="checkbox" name="bidNtceSttusNm" value="재입찰공고" checked /> 재입찰공고</label>
+                        <c:set var="sttusArray" value="${paramValues.bidNtceSttusNm}" />
+                        <label>
+                            <input type="checkbox" name="bidNtceSttusNm" value="일반공고" <c:if test="${empty sttusArray or fn:contains(fn:join(sttusArray, ','), '일반공고')}">checked</c:if> />일반공고
+                        </label>
+                        <label>
+                            <input type="checkbox" name="bidNtceSttusNm" value="긴급공고" <c:if test="${empty sttusArray or fn:contains(fn:join(sttusArray, ','), '긴급공고')}">checked</c:if> />긴급공고
+                        </label>
+                        <label>
+                            <input type="checkbox" name="bidNtceSttusNm" value="정정공고" <c:if test="${empty sttusArray or fn:contains(fn:join(sttusArray, ','), '정정공고')}">checked</c:if> />정정공고
+                        </label>
+                        <label>
+                            <input type="checkbox" name="bidNtceSttusNm" value="취소공고" <c:if test="${empty sttusArray or fn:contains(fn:join(sttusArray, ','), '취소공고')}">checked</c:if> />취소공고
+                        </label>
+                        <label>
+                            <input type="checkbox" name="bidNtceSttusNm" value="재입찰공고" <c:if test="${empty sttusArray or fn:contains(fn:join(sttusArray, ','), '재입찰공고')}">checked</c:if> />재입찰공고
+                        </label>
                     </td>
                 </tr>
 
@@ -104,9 +141,9 @@
                 <tr>
                     <th>추정 가격</th>
                     <td colspan="3">
-                        <input type="number" id="minPrce" name="minPrce" placeholder="0" style="width: 150px;" /> 억원 ~
-                        <input type="number" id="maxPrce" name="maxPrce" placeholder="5.5" style="width: 150px;" /> 억원
-                        <span style="color: #999; font-size: 12px; margin-left: 10px;">예)추정금액 : 0.5 억원, 5.5억원까지</span>
+                        <input type="text" id="minPrce" name="minPrce" placeholder="0" style="width: 150px;" /> 억원 ~
+                        <input type="text" id="maxPrce" name="maxPrce" placeholder="5.5" style="width: 150px;" /> 억원
+                        <span style="color: #999; font-size: 12px; margin-left: 10px;">예)5천만원 : 0.5억원, 5억5천만원 : 5.5억원</span>
                     </td>
                 </tr>
                 </tbody>
@@ -122,9 +159,19 @@
         <!-- 검색 결과 테이블 -->
         <div class="result-area">
             <!-- 검색 결과 카운트 -->
-            <div class="result-count">[검색결과 ${bidPbancListCnt}건]</div>
+            <div class="result-count">[검색결과 <fmt:formatNumber value="${bidPbancListCnt}" pattern="#,###" />건]</div>
 
             <table class="result-table">
+                <colgroup>
+                    <col style="width: 50px;">   <!-- 번호 -->
+                    <col style="width: 450px;">  <!-- 공고번호/공고명 -->
+                    <col style="width: 90px;">  <!-- 상태분류 -->
+                    <col style="width: 120px;">  <!-- 공고업무구분 -->
+                    <col style="width: 90px;">  <!-- 계약방법 -->
+                    <col style="width: 130px;">  <!-- 추정가격 -->
+                    <col style="width: 150px;">  <!-- 수요기관 -->
+                    <col style="width: 190px;">  <!-- 개시일시/마감일시 -->
+                </colgroup>
                 <thead>
                 <tr>
                     <th>번호</th>
@@ -157,11 +204,11 @@
                                 <td style="text-align: center;">${item.bidNtceSttusNm}</td>
                                 <td style="text-align: center;">${item.bsnsDivNm}</td>
                                 <td style="text-align: center;">${item.cntrctCnclsMthdNm}</td>
-                                <td style="text-align: right;">${item.presmptPrce}</td>
+                                <td style="text-align: right;"><fmt:formatNumber value="${item.presmptPrce}" pattern="#,###" /></td>
                                 <td style="text-align: center;">${item.dmndInsttNm}</td>
                                 <td style="text-align: center;">
-                                        ${item.bidBeginDate} ${item.bidBeginTm}<br/>
-                                        ${item.bidClseDate} ${item.bidClseTm}
+                                    <div style="white-space: nowrap;">${item.bidBeginDate} ${item.bidBeginTm}</div>
+                                    <div style="white-space: nowrap; margin-top: 4px;">${item.bidClseDate} ${item.bidClseTm}</div>
                                 </td>
                             </tr>
                         </c:forEach>

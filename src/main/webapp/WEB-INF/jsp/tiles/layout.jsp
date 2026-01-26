@@ -185,6 +185,7 @@
             border-collapse: collapse;
             border: 1px solid #dee2e6;
             background-color: #ffffff;
+            table-layout: fixed;
         }
 
         .result-table thead {
@@ -197,12 +198,15 @@
             border: 1px solid #dee2e6;
             font-weight: 600;
             text-align: center;
+            white-space: nowrap;
         }
 
         .result-table td {
             padding: 12px;
             border: 1px solid #dee2e6;
             color: #495057;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .result-table tbody tr:hover {
@@ -212,6 +216,8 @@
         .result-table a {
             color: #007bff;
             text-decoration: none;
+            display: block;
+            word-wrap: break-word;
         }
 
         .result-table a:hover {

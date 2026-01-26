@@ -10,6 +10,23 @@
         FROM collectdb.bid_pbanc_info
         <where>
             "bidNtceNo" IS NOT NULL
+
+            <!-- 날짜 조건 -->
+            <if test="searchBidBeginDate != null and searchBidBeginDate != ''">
+                AND "bidBeginDate" <![CDATA[>=]]> #{searchBidBeginDate}
+            </if>
+            <if test="searchBidClseDate != null and searchBidClseDate != ''">
+                AND "bidClseDate" <![CDATA[<=]]> #{searchBidClseDate}
+            </if>
+
+            <!-- 추정가격 조건 -->
+            <if test="minPrce != null and minPrce != ''">
+                AND "presmptPrce" <![CDATA[>=]]> (CAST(#{minPrce} AS NUMERIC) * 100000000)
+            </if>
+            <if test="maxPrce != null and maxPrce != ''">
+                AND "presmptPrce" <![CDATA[<=]]> (CAST(#{maxPrce} AS NUMERIC) * 100000000)
+            </if>
+
             <if test="bidNtceNo != null and bidNtceNo != ''">
                 AND "bidNtceNo" = #{bidNtceNo}
             </if>
@@ -98,6 +115,23 @@
         FROM collectdb.bid_pbanc_info
         <where>
             "bidNtceNo" IS NOT NULL
+
+            <!-- 날짜 조건 -->
+            <if test="searchBidBeginDate != null and searchBidBeginDate != ''">
+                AND "bidBeginDate" <![CDATA[>=]]> #{searchBidBeginDate}
+            </if>
+            <if test="searchBidClseDate != null and searchBidClseDate != ''">
+                AND "bidClseDate" <![CDATA[<=]]> #{searchBidClseDate}
+            </if>
+
+            <!-- 추정가격 조건 -->
+            <if test="minPrce != null and minPrce != ''">
+                AND "presmptPrce" <![CDATA[>=]]> (CAST(#{minPrce} AS NUMERIC) * 100000000)
+            </if>
+            <if test="maxPrce != null and maxPrce != ''">
+                AND "presmptPrce" <![CDATA[<=]]> (CAST(#{maxPrce} AS NUMERIC) * 100000000)
+            </if>
+
             <if test="bidNtceNo != null and bidNtceNo != ''">
                 AND "bidNtceNo" = #{bidNtceNo}
             </if>
