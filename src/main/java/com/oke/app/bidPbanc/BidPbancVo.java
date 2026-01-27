@@ -75,4 +75,9 @@ public class BidPbancVo extends PaginationInfo{
     private String maxPrce;                         // 최대 추정가격
 
     private String rnum;
+
+    // 여러 값 전달을 위한 컬럼
+    private String[] bsnsDivNmArray;                // 공고 업무 구분
+    private String[] cntrctCnclsMthdNmArray;        // 계약 방법
+    private String[] bidNtceSttusNmArray;           // 상태 분류
 }
