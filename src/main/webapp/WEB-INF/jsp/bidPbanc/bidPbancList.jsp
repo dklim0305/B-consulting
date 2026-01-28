@@ -206,8 +206,7 @@
         <!-- 검색 결과 테이블 -->
         <div class="result-area">
             <!-- 검색 결과 카운트 -->
-            <div class="result-count">[검색결과 <fmt:formatNumber value="${bidPbancListCnt}" pattern="#,###" />건]</div>
-
+            <div class="result-count"> 입찰 공고 검색 [검색결과 <fmt:formatNumber value="${bidPbancListCnt}" pattern="#,###" />건]</div>
             <table class="result-table">
                 <colgroup>
                     <col style="width: 50px;">   <!-- 번호 -->
@@ -241,7 +240,7 @@
                     <c:otherwise>
                         <c:forEach var="item" items="${bidPbancVoList}" varStatus="status">
                             <tr>
-                                <td style="text-align: center;">${status.count}</td>
+                                <td style="text-align: center;">${item.rnum}</td>
                                 <td>
                                     <a href="/bidPbanc/retrieveBidPbancInfoDetail.do?bidNtceNo=${item.bidNtceNo}&bidNtceOrd=${item.bidNtceOrd}">
                                             ${item.bidNtceNo}<br/>
