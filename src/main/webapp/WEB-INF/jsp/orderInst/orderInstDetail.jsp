@@ -8,19 +8,16 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <script src="http://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="/app/js/orderInst/orderInstDetail.js"></script>
-<html>
-<head>
-    <title>발주 기관 상세 조회</title>
-</head>
-<body>
+
 <div id="wrapper">
     <div class="header">
         <h1 class="page-title"></h1>
     </div>
     <div class="page-inner">
-        <table id="orderInstInfoTable">
+        <table id="orderInstInfoTable" class="result-table">
             <p><b>${orderInstDetail.fullNm} 기본 정보</b></p>
             <tbody>
                 <tr>
@@ -40,62 +37,17 @@
                 </tr>
                 <tr>
                     <th>소재지</th>
-                    <td>${orderInstDetail.locatstdNm}</td>
+                    <td colspan="3">${orderInstDetail.locatstdNm}</td>
                 </tr>
             </tbody>
         </table>
-        <p><b>기관 발주 공고 내역</b> [총 ${orderPbancListCnt}건]</p>
-        <table id="orderPbancListTable">
-            <thead>
-                <tr>
-                    <th>번호</th>
-                    <th>공고번호/공고명</th>
-                    <th>공고상태</th>
-                    <th>업무구분</th>
-                    <th>공고기관</th>
-                    <th>수요기관</th>
-                    <th>추정가격</th>
-                    <th>공고일시</th>
-                </tr>
-            </thead>
-            <tbody>
-                <c:if test="${orderPbancList.size() eq 0}">
-                    <tr>
-                        <td colspan="8">
-                            조회된 데이터가 없습니다
-                        </td>
-                    </tr>
-                </c:if>
-                <c:forEach items="${orderPbancList}" var="orderPbanc" varStatus="status">
-                    <tr>
-                        <td>${orderPbanc.rnum}</td>
-                        <td>[${orderPbanc.bidNtceNo}]<br><b>${orderPbanc.bidNtceNm}</b></td>
-                        <td>${orderPbanc.bidNtceSttusNm}</td>
-                        <td>${orderPbanc.bsnsDivNm}</td>
-                        <td>${orderPbanc.ntceInsttNm}</td>
-                        <td>${orderPbanc.dmndInsttNm}</td>
-                        <td>${orderPbanc.presmptPrce}</td>
-                        <td>${orderPbanc.bidNtceDate} ${orderPbanc.bidNtceBgn}</td>
-                    </tr>
-                </c:forEach>
-            </tbody>
-            <form id="orderPbancForm" name="orderPbancForm" action="/orderInst/retrieveOrderInstDetail.do?orgCd=${orderInstVo.orgCd}}">
-                <input type="hidden" name="currentPageNo1" value="${currentPageNo1}" />
-            </form>
-            <c:if test="${orderPbancList.size() ne 0}">
-                <ui:pagination paginationInfo="${orderInstVo}" type="text" jsFunction="fnPaging" />
-            </c:if>
-        </table>
-        <p><b>물품 현황</b></p>
-        <table id="">
-        </table>
-        <p><b>업종 현황</b></p>
-        <table id="">
-        </table>
+        <jsp:include page="/page/orderInstPbancList.do">
+            <jsp:param name="dmndInsttCd" value="${orderInstDetail.orgCd}" />
+        </jsp:include>
+        <jsp:include page="/page/orderInstBidPtcpEntList.do" />
+        <jsp:include page="/page/orderInstSucsfEntList.do" />
         <div id="btnDiv">
-            <button id="listBtn">목록</button>
+            <button id="listBtn" class="btn btn-secondary">목록</button>
         </div>
     </div>
 </div>
-</body>
-</html>

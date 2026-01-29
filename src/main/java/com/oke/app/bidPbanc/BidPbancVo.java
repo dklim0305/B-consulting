@@ -75,4 +75,10 @@ public class BidPbancVo extends PaginationInfo{
     private String maxPrce;                         // 최대 추정가격
 
     private String rnum;
+    private String bidPtcpCnt;                      // 입찰 참여 갯수
+    private String bidprcCorpBizrno;                // 입찰 기업 사업자번호
+    private String bidprcCorpNm;                    // 입찰 기업명
+    private String sucsfCnt;                        // 입찰 참여 갯수
+    private String fnlSucsfCorpBizrno;              // 낙찰 기업 사업자번호
+    private String fnlSucsfCorpNm;                  // 낙찰 기업명
 }

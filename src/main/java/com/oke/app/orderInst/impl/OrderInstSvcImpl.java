@@ -32,17 +32,42 @@ public class OrderInstSvcImpl extends EgovAccessServiceImpl implements OrderInst
     }
 
     @Override
+    public List<OrderInstVo> retrieveOrderInstLctn(OrderInstVo orderInstVo) {
+        return dao.selectList("orderInst.retrieveOrderInstLctn");
+    }
+
+    @Override
     public OrderInstVo retrieveOrderInstDetail(OrderInstVo orderInstVo) {
         return dao.selectOne("orderInst.retrieveOrderInstDetail", orderInstVo);
     }
 
     @Override
-    public int retrieveOrderPbancListCnt(OrderInstVo orderInstVo) {
-        return dao.selectOne("orderInst.retrieveOrderPbancListCnt", orderInstVo);
+    public int retrieveOrderPbancListCnt(BidPbancVo bidPbancVo) {
+        return dao.selectOne("orderInst.retrieveOrderPbancListCnt", bidPbancVo);
     }
 
     @Override
-    public List<BidPbancVo> retrieveOrderPbancList(OrderInstVo orderInstVo) {
-        return dao.selectList("orderInst.retrieveOrderPbancList", orderInstVo);
+    public List<BidPbancVo> retrieveOrderPbancList(BidPbancVo bidPbancVo) {
+        return dao.selectList("orderInst.retrieveOrderPbancList", bidPbancVo);
+    }
+
+    @Override
+    public int retrieveBidPtcpEntListCnt(OrderInstVo orderInstVo) {
+        return dao.selectOne("orderInst.retrieveBidPtcpEntListCnt", orderInstVo);
+    }
+
+    @Override
+    public List<BidPbancVo> retrieveBidPtcpEntList(OrderInstVo orderInstVo) {
+        return dao.selectList("orderInst.retrieveBidPtcpEntList", orderInstVo);
+    }
+
+    @Override
+    public int retrieveSucsfEntListCnt(OrderInstVo orderInstVo) {
+        return dao.selectOne("orderInst.retrieveSucsfEntListCnt", orderInstVo);
+    }
+
+    @Override
+    public List<BidPbancVo> retrieveSucsfEntList(OrderInstVo orderInstVo) {
+        return dao.selectList("orderInst.retrieveSucsfEntList", orderInstVo);
     }
 }

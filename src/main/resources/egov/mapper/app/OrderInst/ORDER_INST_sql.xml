@@ -101,6 +101,32 @@
         GROUP BY TYPEBIG_NM
     </select>
 
+    <!-- 소재지 조회 -->
+    <select id="retrieveOrderInstLctn" parameterType="com.oke.app.orderInst.OrderInstVo" resultType="com.oke.app.orderInst.OrderInstVo">
+        SELECT *
+             , ROW_NUMBER() OVER() AS RNUM
+        FROM (
+            SELECT REGION_CD AS LOCATSTD_CD
+                 , SIDO_CD
+                 , SGG_CD
+                 , UMD_CD
+                 , RI_CD
+                 , LOCATJUMIN_CD
+                 , LOCATJIJUK_CD
+                 , LOCATADD_NM AS LOCATSTD_NM
+                 , LOCAT_ORDER
+                 , LOCAT_RM
+                 , LOCATHIGH_CD
+                 , LOCALLOW_NM
+                 , ADPT_DE
+                 , ROW_NUMBER() OVER(PARTITION BY SIDO_CD ORDER BY REGION_CD) AS NUM
+            FROM PORTAL.STDG_CD
+             ) A
+        WHERE 1=1
+        AND NUM = 1
+        ORDER BY LOCATSTD_CD
+    </select>
+
     <!-- 발주기관 상세조회 -->
     <select id="retrieveOrderInstDetail" parameterType="com.oke.app.orderInst.OrderInstVo" resultType="com.oke.app.orderInst.OrderInstVo">
         SELECT ORG_CD
@@ -134,15 +160,15 @@
     </select>
 
     <!-- 발주 공고 목록갯수조회 -->
-    <select id="retrieveOrderPbancListCnt" parameterType="com.oke.app.orderInst.OrderInstVo" resultType="int">
+    <select id="retrieveOrderPbancListCnt" parameterType="com.oke.app.bidPbanc.BidPbancVo" resultType="int">
         SELECT COUNT(*)
         FROM PORTAL.BID_PBANC_INFO
         WHERE 1=1
-          AND DMND_INSTT_CD = #{orgCd}
+        AND DMND_INSTT_CD = #{dmndInsttCd}
     </select>
 
     <!-- 발주 공고 목록조회 -->
-    <select id="retrieveOrderPbancList" parameterType="com.oke.app.orderInst.OrderInstVo" resultType="com.oke.app.bidPbanc.BidPbancVo">
+    <select id="retrieveOrderPbancList" parameterType="com.oke.app.bidPbanc.BidPbancVo" resultType="com.oke.app.bidPbanc.BidPbancVo">
         SELECT *
         FROM (
             SELECT *
@@ -208,7 +234,7 @@
                      , LAST_CHNG_DTL_DTTM
                 FROM PORTAL.BID_PBANC_INFO
                 WHERE 1 = 1
-                AND DMND_INSTT_CD = #{orgCd}
+                AND DMND_INSTT_CD = #{dmndInsttCd}
                 ORDER BY BID_NTCE_DATE DESC, BID_NTCE_BGN DESC
             ) T1
         ) T2
@@ -217,4 +243,91 @@
             AND RNUM <![CDATA[>]]> #{firstRecordIndex} AND RNUM <![CDATA[<=]]> #{lastRecordIndex}
         </if>
     </select>
+
+    <!-- 입찰 참여 기업 목록갯수조회 -->
+    <select id="retrieveBidPtcpEntListCnt" parameterType="com.oke.app.orderInst.OrderInstVo" resultType="int">
+        SELECT COUNT(*)
+        FROM (
+            SELECT BIDPRC_CORP_BIZRNO
+                 , BIDPRC_CORP_NM
+                 , COUNT(*) AS BID_PTCP_CNT
+            FROM PORTAL.SCSBD_INFO
+            WHERE 1=1
+            AND DMND_INSTT_CD = #{orgCd}
+            AND BIDPRC_CORP_BIZRNO IS NOT NULL
+            GROUP BY BIDPRC_CORP_BIZRNO, BIDPRC_CORP_NM
+        ) A
+    </select>
+
+    <!-- 입찰 참여 기업 목록조회 -->
+    <select id="retrieveBidPtcpEntList" parameterType="com.oke.app.orderInst.OrderInstVo" resultType="com.oke.app.bidPbanc.BidPbancVo">
+        SELECT *
+        FROM (
+            SELECT *
+                 , ROW_NUMBER() OVER() AS RNUM
+            FROM (
+                SELECT *
+                FROM (
+                    SELECT BIDPRC_CORP_BIZRNO
+                         , BIDPRC_CORP_NM
+                         , COUNT(*) AS BID_PTCP_CNT
+                    FROM PORTAL.SCSBD_INFO
+                    WHERE 1=1
+                    AND DMND_INSTT_CD = #{orgCd}
+                    AND BIDPRC_CORP_BIZRNO IS NOT NULL
+                    GROUP BY BIDPRC_CORP_BIZRNO, BIDPRC_CORP_NM
+                ) T1
+                ORDER BY BID_PTCP_CNT DESC, BIDPRC_CORP_NM COLLATE "ko-KR-x-icu"
+            ) T2
+        ) T3
+        WHERE 1=1
+        <if test="firstRecordIndex >= 0 and lastRecordIndex > 0">
+            AND RNUM <![CDATA[>]]> #{firstRecordIndex} AND RNUM <![CDATA[<=]]> #{lastRecordIndex}
+        </if>
+    </select>
+
+    <!-- 낙찰 기업 목록갯수조회 -->
+    <select id="retrieveSucsfEntListCnt" parameterType="com.oke.app.orderInst.OrderInstVo" resultType="int">
+        SELECT COUNT(*)
+        FROM (
+            SELECT FNL_SUCSF_CORP_BIZRNO
+                 , FNL_SUCSF_CORP_NM
+                 , COUNT(*) AS SUCSF_CNT
+            FROM PORTAL.SCSBD_INFO
+            WHERE 1=1
+            AND DMND_INSTT_CD = #{orgCd}
+            AND FNL_SUCSF_CORP_BIZRNO IS NOT NULL
+            AND FNL_SUCSF_CORP_NM IS NOT NULL
+            GROUP BY FNL_SUCSF_CORP_BIZRNO, FNL_SUCSF_CORP_NM
+        ) T1
+    </select>
+
+    <!-- 낙찰 기업 목록조회 -->
+    <select id="retrieveSucsfEntList" parameterType="com.oke.app.orderInst.OrderInstVo" resultType="com.oke.app.bidPbanc.BidPbancVo">
+        SELECT *
+        FROM (
+            SELECT *
+                 , ROW_NUMBER() OVER() AS RNUM
+            FROM (
+                SELECT *
+                FROM (
+                    SELECT FNL_SUCSF_CORP_BIZRNO
+                         , FNL_SUCSF_CORP_NM
+                         , COUNT(*) AS SUCSF_CNT
+                    FROM PORTAL.SCSBD_INFO
+                    WHERE 1=1
+                    AND DMND_INSTT_CD = #{orgCd}
+                    AND FNL_SUCSF_CORP_BIZRNO IS NOT NULL
+                    AND FNL_SUCSF_CORP_NM IS NOT NULL
+                    GROUP BY FNL_SUCSF_CORP_BIZRNO, FNL_SUCSF_CORP_NM
+                ) T1
+                ORDER BY SUCSF_CNT DESC, FNL_SUCSF_CORP_NM COLLATE "ko-KR-x-icu"
+            ) T2
+        ) T3
+        WHERE 1=1
+        <if test="firstRecordIndex >= 0 and lastRecordIndex > 0">
+            AND RNUM <![CDATA[>]]> #{firstRecordIndex} AND RNUM <![CDATA[<=]]> #{lastRecordIndex}
+        </if>
+    </select>
+
 </mapper>

@@ -9,6 +9,7 @@ $(function() {
     // 초기화
     $("#initBtn").on("click", function() {
         $("#fullNm").val("");
+        $("input[type=checkbox]").prop("checked", false);
     })
 
 });

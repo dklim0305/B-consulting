@@ -1,27 +1,35 @@
 $(function() {
 
-    // 검색
-    $("#searchBtn").on("click", function() {
-        $("#searchForm").submit();
+    // 목록
+    $("#listBtn").on("click", function() {
+        location.href = "/orderInst/retrieveOrderInstList.do";
     })
-
-    // 초기화
-    $("#initBtn").on("click", function() {
-        $("#fullNm").val("");
-        console.log("초기화")
-    })
-
 });
 
-// 한 페이지당 보여줄 게시물 갯수
-function fnSelectPage() {
-    $("#currentPageNo").val(1);
-    $("#searchForm").submit();
+// 기관 발주 공고 내역 페이징
+function fnPaging1(page) {
+    console.log(page)
+    $("#pbancArea").load(
+        "/page/orderInstPbancList.do"
+        + "?dmndInsttCd=" + $("#dmndInsttCd").val()
+        + "&currentPageNo=" + page
+    );
 }
 
-// 페이지 이동
-function fnPaging(page) {
-    $("#currentPageNo").val(page);
-    $("#searchForm").submit();
+// 입찰 참여 기업 페이징
+function fnPaging2(page) {
+    $("#bidPtcpEntArea").load(
+        "/page/orderInstBidPtcpEntList.do"
+        + "?orgCd=" + $("#orgCd").val()
+        + "&currentPageNo=" + page
+    );
 }
 
+// 낙찰 기업 페이징
+function fnPaging3(page) {
+    $("#sucsfEntArea").load(
+        "/page/orderInstSucsfEntList.do"
+        + "?orgCd=" + $("#orgCd").val()
+        + "&currentPageNo=" + page
+    );
+}

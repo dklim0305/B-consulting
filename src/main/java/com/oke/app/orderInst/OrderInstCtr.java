@@ -73,6 +73,10 @@ public class OrderInstCtr {
         List<OrderInstVo> orderInstClsfList = orderInstSvc.retrieveOrderInstClsf();
         model.addAttribute("orderInstClsfList", orderInstClsfList);
 
+        // 소재지 조회
+        List<OrderInstVo> orderInstLctnList = orderInstSvc.retrieveOrderInstLctn(orderInstVo);
+        model.addAttribute("orderInstLctnList", orderInstLctnList);
+
         return "orderInst/orderInstList";
     }
 
@@ -83,16 +87,57 @@ public class OrderInstCtr {
         OrderInstVo orderInstDetail = orderInstSvc.retrieveOrderInstDetail(orderInstVo);
         model.addAttribute("orderInstDetail", orderInstDetail);
 
+        return "orderInst/orderInstDetail";
+    }
+
+    @GetMapping("/page/orderInstPbancList.do")
+    public String retrieveOrderInstPbancList(@ModelAttribute BidPbancVo bidPbancVo, Model model) {
+
         // 발주 공고 목록갯수조회
-        int orderPbancListCnt = orderInstSvc.retrieveOrderPbancListCnt(orderInstVo);
+        int orderPbancListCnt = orderInstSvc.retrieveOrderPbancListCnt(bidPbancVo);
         model.addAttribute("orderPbancListCnt", orderPbancListCnt);
 
-        int currentPageNo1 = orderInstVo.getCurrentPageNo();
-        if (currentPageNo1 == 0) {
+        int currentPageNo = bidPbancVo.getCurrentPageNo();
+        if (currentPageNo == 0) {
+            bidPbancVo.setCurrentPageNo(1);
+        }
+
+        bidPbancVo.setTotalRecordCount(orderPbancListCnt);
+
+        // 페이지당 게시물 갯수
+        int recordCountPerPage = bidPbancVo.getRecordCountPerPage();
+        if (recordCountPerPage == 0) {
+            bidPbancVo.setRecordCountPerPage(10);
+        }
+
+        bidPbancVo.setPageSize(10);
+
+        int totalPageCount = bidPbancVo.getTotalPageCount();
+
+        model.addAttribute("currentPageNo", currentPageNo);
+        model.addAttribute("totalPageCount", totalPageCount);
+
+        // 발주 공고 목록조회
+
+        List<BidPbancVo> orderPbancList = orderInstSvc.retrieveOrderPbancList(bidPbancVo);
+        model.addAttribute("orderPbancList", orderPbancList);
+
+        return "page/orderInstPbancList";
+    }
+
+    @GetMapping("/page/orderInstBidPtcpEntList.do")
+    public String retrieveBidPtcpEntList(@ModelAttribute OrderInstVo orderInstVo, Model model) {
+
+        // 입찰 참여 기업 목록갯수조회
+        int bidPtcpEntListCnt = orderInstSvc.retrieveBidPtcpEntListCnt(orderInstVo);
+        model.addAttribute("bidPtcpEntListCnt", bidPtcpEntListCnt);
+
+        int currentPageNo = orderInstVo.getCurrentPageNo();
+        if (currentPageNo == 0) {
             orderInstVo.setCurrentPageNo(1);
         }
 
-        orderInstVo.setTotalRecordCount(orderPbancListCnt);
+        orderInstVo.setTotalRecordCount(bidPtcpEntListCnt);
 
         // 페이지당 게시물 갯수
         int recordCountPerPage = orderInstVo.getRecordCountPerPage();
@@ -102,17 +147,50 @@ public class OrderInstCtr {
 
         orderInstVo.setPageSize(10);
 
-        int totalPageCount1 = orderInstVo.getTotalPageCount();
+        int totalPageCount = orderInstVo.getTotalPageCount();
 
-        model.addAttribute("currentPageNo1", currentPageNo1);
-        model.addAttribute("totalPageCount1", totalPageCount1);
+        model.addAttribute("currentPageNo", currentPageNo);
+        model.addAttribute("totalPageCount", totalPageCount);
 
-        // 발주 공고 목록조회
-        List<BidPbancVo> orderPbancList = orderInstSvc.retrieveOrderPbancList(orderInstVo);
-        model.addAttribute("orderPbancList", orderPbancList);
+        // 입찰 참여 기업 목록조회
+        List<BidPbancVo> bidPtcpEntList = orderInstSvc.retrieveBidPtcpEntList(orderInstVo);
+        model.addAttribute("bidPtcpEntList", bidPtcpEntList);
 
-        return "orderInst/orderInstDetail";
+        return "page/orderInstBidPtcpEntList";
+    }
 
+    @GetMapping("/page/orderInstSucsfEntList.do")
+    public String retrieveSucsfEntList(@ModelAttribute OrderInstVo orderInstVo, Model model) {
+
+        // 낙찰 기업 목록갯수조회
+        int sucsfEntListCnt = orderInstSvc.retrieveSucsfEntListCnt(orderInstVo);
+        model.addAttribute("sucsfEntListCnt", sucsfEntListCnt);
+
+        int currentPageNo = orderInstVo.getCurrentPageNo();
+        if (currentPageNo == 0) {
+            orderInstVo.setCurrentPageNo(1);
+        }
+
+        orderInstVo.setTotalRecordCount(sucsfEntListCnt);
+
+        // 페이지당 게시물 갯수
+        int recordCountPerPage = orderInstVo.getRecordCountPerPage();
+        if (recordCountPerPage == 0) {
+            orderInstVo.setRecordCountPerPage(10);
+        }
+
+        orderInstVo.setPageSize(10);
+
+        int totalPageCount = orderInstVo.getTotalPageCount();
+
+        model.addAttribute("currentPageNo", currentPageNo);
+        model.addAttribute("totalPageCount", totalPageCount);
+
+        // 낙찰 기업 목록조회
+        List<BidPbancVo> sucsfEntList = orderInstSvc.retrieveSucsfEntList(orderInstVo);
+        model.addAttribute("sucsfEntList", sucsfEntList);
+
+        return "page/orderInstSucsfEntList";
     }
 
 }
