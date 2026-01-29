@@ -10,12 +10,26 @@
         <put-attribute name="body" value="" />
     </definition>
 
-    <definition name="*/*" extends="default-layout">
-        <put-attribute name="body" value="/WEB-INF/jsp/{1}/{2}.jsp" />
+<!--    <definition name="*/*" extends="default-layout">-->
+<!--        <put-attribute name="body" value="/WEB-INF/jsp/{1}/{2}.jsp" />-->
+<!--    </definition>-->
+
+    <definition name="bidEnt/*" extends="default-layout">
+        <put-attribute name="body" value="/WEB-INF/jsp/bidEnt/{1}.jsp" />
+    </definition>
+
+    <definition name="bidPbanc/*" extends="default-layout">
+        <put-attribute name="body" value="/WEB-INF/jsp/bidPbanc/{1}.jsp" />
+    </definition>
+
+    <definition name="orderInst/*" extends="default-layout">
+        <put-attribute name="body" value="/WEB-INF/jsp/orderInst/{1}.jsp" />
     </definition>
 
     <definition name="*/*/*" extends="default-layout">
         <put-attribute name="body" value="/WEB-INF/jsp/{1}/{2}/{3}.jsp" />
     </definition>
+
+    <definition name="page/*" template="/WEB-INF/jsp/page/{1}.jsp" />
 
 </tiles-definitions>
