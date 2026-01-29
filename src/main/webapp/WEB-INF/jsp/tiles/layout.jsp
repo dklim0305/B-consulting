@@ -25,7 +25,7 @@
             background-color: #ffffff;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-family: "Segoe UI", Arial, sans-serif;
         }
 
         #wrapper {
@@ -268,6 +268,172 @@
 
         .dropdown-menu .dropdown-item {
             padding-left: 1rem !important;
+        }
+
+        .detail-section,
+        .schedule-section,
+        .related-section {
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #343a40;
+            color: #333;
+        }
+
+        /* 상세 정보 테이블 */
+        .detail-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #dee2e6;
+            background-color: #ffffff;
+            table-layout: fixed;
+        }
+
+        .detail-table th {
+            background-color: #e9ecef;
+            padding: 15px;
+            text-align: left;
+            border: 1px solid #dee2e6;
+            font-weight: 600;
+            color: #495057;
+            vertical-align: middle;
+        }
+
+        .detail-table td {
+            padding: 15px;
+            border: 1px solid #dee2e6;
+            color: #495057;
+            vertical-align: middle;
+            line-height: 1.6;
+        }
+
+        /* 링크 스타일 */
+        .link-primary {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .link-primary:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+
+        /* 입찰 일정 테이블 */
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #dee2e6;
+            background-color: #ffffff;
+            table-layout: fixed;
+            margin-bottom: 20px;
+        }
+
+        .schedule-table thead {
+            background-color: #e9ecef;
+        }
+
+        .schedule-table th {
+            padding: 15px;
+            border: 1px solid #dee2e6;
+            font-weight: 600;
+            text-align: center;
+            color: #495057;
+            background-color: #e9ecef;
+        }
+
+        .schedule-table td {
+            padding: 15px;
+            border: 1px solid #dee2e6;
+            color: #495057;
+            text-align: center;
+            background-color: #ffffff;
+        }
+
+        /* D-day 셀 */
+        .dday-cell {
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        #dday {
+            color: #dc3545;
+        }
+
+        /* 날짜 셀 */
+        .date-cell div {
+            margin: 3px 0;
+            line-height: 1.4;
+        }
+
+        /* 정보 셀 */
+        .info-cell {
+            text-align: center;
+        }
+
+        /* 입찰 진행 상태 */
+        .status-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding: 0px;
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .status-item {
+            text-align: center;
+            flex: 1;
+            padding: 15px;
+            border-right: 1px solid #dee2e6;
+        }
+        .status-item:last-child {
+            border-right: none;
+        }
+
+        .status-item:first-child {
+            background-color: #fec610;
+        }
+
+        .status-label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 5px;
+        }
+
+        .status-text {
+            font-size: 14px;
+            color: #dc3545;
+            font-weight: 500;
+        }
+
+        /* 버튼 영역 */
+        .btn-area {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .btn-secondary {
+            padding: 12px 40px;
+            background-color: #6c757d;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
         }
     </style>
 </head>

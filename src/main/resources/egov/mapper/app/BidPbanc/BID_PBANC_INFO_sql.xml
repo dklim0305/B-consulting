@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="bidPbanc">
 
-    <!-- 입찰공고 목로갯수조회 -->
+    <!-- 입찰공고 목록갯수조회 -->
     <select id="retrieveBidPbancInfoListCnt" parameterType="com.oke.app.bidPbanc.BidPbancVo" resultType="int">
         SELECT
         COUNT(*)
@@ -28,7 +28,7 @@
             </if>
 
             <if test="bidNtceNo != null and bidNtceNo != ''">
-                AND "bidNtceNo" = #{bidNtceNo}
+                AND "bidNtceNo" LIKE '%' || #{bidNtceNo} || '%'
             </if>
             <if test="bidNtceOrd != null and bidNtceOrd != ''">
                 AND "bidNtceOrd" = #{bidNtceOrd}
@@ -42,114 +42,151 @@
             <if test="dmndInsttNm != null and dmndInsttNm != ''">
                 AND "dmndInsttNm" LIKE '%' || #{dmndInsttNm} || '%'
             </if>
+
+            <if test="bsnsDivNmArray != null and bsnsDivNmArray.length > 0">
+                AND "bsnsDivNm" IN
+                <foreach collection="bsnsDivNmArray" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="cntrctCnclsMthdNmArray != null and cntrctCnclsMthdNmArray.length > 0">
+                AND "cntrctCnclsMthdNm" IN
+                <foreach collection="cntrctCnclsMthdNmArray" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+
+            <if test="bidNtceSttusNmArray != null and bidNtceSttusNmArray.length > 0">
+                AND "bidNtceSttusNm" IN
+                <foreach collection="bidNtceSttusNmArray" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+
         </where>
     </select>
 
     <!-- 입찰공고 목록 조회 -->
     <select id="retrieveBidPbancInfoList" parameterType="com.oke.app.bidPbanc.BidPbancVo" resultType="com.oke.app.bidPbanc.BidPbancVo">
-        SELECT *
-        FROM(
         SELECT
-        A1.*
-        , ROW_NUMBER() OVER(ORDER BY "bidNtceNo", "bidNtceOrd") AS RNUM
+            *
         FROM (
-        SELECT
-        "bidNtceNo"
-        , "bidNtceOrd"
-        , "refNtceNo"
-        , "refNtceOrd"
-        , "ppsNtceYn"
-        , "bidNtceNm"
-        , "bidNtceSttusNm"
-        , "bidNtceDate"
-        , "bidNtceBgn"
-        , "bsnsDivNm"
-        , "intrntnlBidYn"
-        , "cmmnCntrctYn"
-        , "cmmnReciptMethdNm"
-        , "elctrnBidYn"
-        , "cntrctCnclsSttusNm"
-        , "cntrctCnclsMthdNm"
-        , "bidwinrDcsnMthdNm"
-        , "ntceInsttNm"
-        , "ntceInsttCd"
-        , "ntceInsttOfclDeptNm"
-        , "ntceInsttOfclNm"
-        , "ntceInsttOfclTel"
-        , "ntceInsttOfclEmailAdrs"
-        , "dmndInsttNm"
-        , "dmndInsttCd"
-        , "dmndInsttOfclDeptNm"
-        , "dmndInsttOfclNm"
-        , "dmndInsttOfclTel"
-        , "dmndInsttOfclEmailAdrs"
-        , "presnatnOprtnYn"
-        , "presnatnOprtnDate"
-        , "presnatnOprtnTm"
-        , "presnatnOprtnPlce"
-        , "bidPrtcptQlfctRgstClseDate"
-        , "bidPrtcptQlfctRgstClseTm"
-        , "cmmnReciptAgrmntClseDate"
-        , "cmmnReciptAgrmntClseTm"
-        , "bidBeginDate"
-        , "bidBeginTm"
-        , "bidClseDate"
-        , "bidClseTm"
-        , "opengDate"
-        , "opengTm"
-        , "opengPlce"
-        , "asignBdgtAmt"
-        , "presmptPrce"
-        , "rsrvtnPrceDcsnMthdNm"
-        , "rgnLmtYn"
-        , "prtcptPsblRgnNm"
-        , "indstrytyLmtYn"
-        , "bidprcPsblIndstrytyNm"
-        , "bidNtceUrl"
-        , "dataBssDate"
-        , "delYn"
-        , "frstRgsrId"
-        , "frstRgsrDtlDttm"
-        , "lastChngId"
-        , "lastChngDtlDttm"
-        FROM collectdb.bid_pbanc_info
-        <where>
-            "bidNtceNo" IS NOT NULL
+            SELECT *
+            , ROW_NUMBER() OVER(ORDER BY "bidNtceNo" DESC) AS RNUM
+            FROM (
+                SELECT
+                      "bidNtceNo"
+                    , "bidNtceOrd"
+                    , "refNtceNo"
+                    , "refNtceOrd"
+                    , "ppsNtceYn"
+                    , "bidNtceNm"
+                    , "bidNtceSttusNm"
+                    , "bidNtceDate"
+                    , "bidNtceBgn"
+                    , "bsnsDivNm"
+                    , "intrntnlBidYn"
+                    , "cmmnCntrctYn"
+                    , "cmmnReciptMethdNm"
+                    , "elctrnBidYn"
+                    , "cntrctCnclsSttusNm"
+                    , "cntrctCnclsMthdNm"
+                    , "bidwinrDcsnMthdNm"
+                    , "ntceInsttNm"
+                    , "ntceInsttCd"
+                    , "ntceInsttOfclDeptNm"
+                    , "ntceInsttOfclNm"
+                    , "ntceInsttOfclTel"
+                    , "ntceInsttOfclEmailAdrs"
+                    , "dmndInsttNm"
+                    , "dmndInsttCd"
+                    , "dmndInsttOfclDeptNm"
+                    , "dmndInsttOfclNm"
+                    , "dmndInsttOfclTel"
+                    , "dmndInsttOfclEmailAdrs"
+                    , "presnatnOprtnYn"
+                    , "presnatnOprtnDate"
+                    , "presnatnOprtnTm"
+                    , "presnatnOprtnPlce"
+                    , "bidPrtcptQlfctRgstClseDate"
+                    , "bidPrtcptQlfctRgstClseTm"
+                    , "cmmnReciptAgrmntClseDate"
+                    , "cmmnReciptAgrmntClseTm"
+                    , "bidBeginDate"
+                    , "bidBeginTm"
+                    , "bidClseDate"
+                    , "bidClseTm"
+                    , "opengDate"
+                    , "opengTm"
+                    , "opengPlce"
+                    , "asignBdgtAmt"
+                    , "presmptPrce"
+                    , "rsrvtnPrceDcsnMthdNm"
+                    , "rgnLmtYn"
+                    , "prtcptPsblRgnNm"
+                    , "indstrytyLmtYn"
+                    , "bidprcPsblIndstrytyNm"
+                    , "bidNtceUrl"
+                    , "dataBssDate"
+                    , "delYn"
+                    , "frstRgsrId"
+                    , "frstRgsrDtlDttm"
+                    , "lastChngId"
+                    , "lastChngDtlDttm"
+                FROM collectdb.bid_pbanc_info
+                WHERE "bidNtceNo" IS NOT NULL
 
-            <!-- 날짜 조건 -->
-            <if test="searchBidBeginDate != null and searchBidBeginDate != ''">
-                AND "bidBeginDate" <![CDATA[>=]]> #{searchBidBeginDate}
-            </if>
-            <if test="searchBidClseDate != null and searchBidClseDate != ''">
-                AND "bidClseDate" <![CDATA[<=]]> #{searchBidClseDate}
-            </if>
+                    <!-- 날짜 조건 -->
+                    <if test="searchBidBeginDate != null and searchBidBeginDate != ''">
+                        AND "bidBeginDate" <![CDATA[>=]]> #{searchBidBeginDate}
+                    </if>
+                    <if test="searchBidClseDate != null and searchBidClseDate != ''">
+                        AND "bidClseDate" <![CDATA[<=]]> #{searchBidClseDate}
+                    </if>
 
-            <!-- 추정가격 조건 -->
-            <if test="minPrce != null and minPrce != ''">
-                AND "presmptPrce" <![CDATA[>=]]> (CAST(#{minPrce} AS NUMERIC) * 100000000)
-            </if>
-            <if test="maxPrce != null and maxPrce != ''">
-                AND "presmptPrce" <![CDATA[<=]]> (CAST(#{maxPrce} AS NUMERIC) * 100000000)
-            </if>
-
-            <if test="bidNtceNo != null and bidNtceNo != ''">
-                AND "bidNtceNo" = #{bidNtceNo}
-            </if>
-            <if test="bidNtceOrd != null and bidNtceOrd != ''">
-                AND "bidNtceOrd" = #{bidNtceOrd}
-            </if>
-            <if test="bidNtceNm != null and bidNtceNm != ''">
-                AND "bidNtceNm" LIKE '%' || #{bidNtceNm} || '%'
-            </if>
-            <if test="ntceInsttNm != null and ntceInsttNm != ''">
-                AND "ntceInsttNm" LIKE '%' || #{ntceInsttNm} || '%'
-            </if>
-            <if test="dmndInsttNm != null and dmndInsttNm != ''">
-                AND "dmndInsttNm" LIKE '%' || #{dmndInsttNm} || '%'
-            </if>
-        </where>
-        ) A1
-        )A2
+                    <!-- 추정가격 조건 -->
+                    <if test="minPrce != null and minPrce != ''">
+                        AND "presmptPrce" <![CDATA[>=]]> (CAST(#{minPrce} AS NUMERIC) * 100000000)
+                    </if>
+                    <if test="maxPrce != null and maxPrce != ''">
+                        AND "presmptPrce" <![CDATA[<=]]> (CAST(#{maxPrce} AS NUMERIC) * 100000000)
+                    </if>
+                    <if test="bidNtceNo != null and bidNtceNo != ''">
+                        AND "bidNtceNo" LIKE '%' || #{bidNtceNo} || '%'
+                    </if>
+                    <if test="bidNtceOrd != null and bidNtceOrd != ''">
+                        AND "bidNtceOrd" = #{bidNtceOrd}
+                    </if>
+                    <if test="bidNtceNm != null and bidNtceNm != ''">
+                        AND "bidNtceNm" LIKE '%' || #{bidNtceNm} || '%'
+                    </if>
+                    <if test="ntceInsttNm != null and ntceInsttNm != ''">
+                        AND "ntceInsttNm" LIKE '%' || #{ntceInsttNm} || '%'
+                    </if>
+                    <if test="dmndInsttNm != null and dmndInsttNm != ''">
+                        AND "dmndInsttNm" LIKE '%' || #{dmndInsttNm} || '%'
+                    </if>
+                    <if test="bsnsDivNmArray != null and bsnsDivNmArray.length > 0">
+                        AND "bsnsDivNm" IN
+                        <foreach collection="bsnsDivNmArray" item="item" open="(" separator="," close=")">
+                            #{item}
+                        </foreach>
+                    </if>
+                    <if test="cntrctCnclsMthdNmArray != null and cntrctCnclsMthdNmArray.length > 0">
+                        AND "cntrctCnclsMthdNm" IN
+                        <foreach collection="cntrctCnclsMthdNmArray" item="item" open="(" separator="," close=")">
+                            #{item}
+                        </foreach>
+                    </if>
+                    <if test="bidNtceSttusNmArray != null and bidNtceSttusNmArray.length > 0">
+                        AND "bidNtceSttusNm" IN
+                        <foreach collection="bidNtceSttusNmArray" item="item" open="(" separator="," close=")">
+                            #{item}
+                        </foreach>
+                    </if>
+                ORDER BY "bidNtceNo" DESC
+            ) T1
+        ) T2
         WHERE 1=1
         <if test="firstRecordIndex &gt;= 0 and lastRecordIndex &gt; 0">
             AND RNUM <![CDATA[>]]> #{firstRecordIndex} AND RNUM <![CDATA[<=]]> #{lastRecordIndex}
@@ -159,72 +196,67 @@
     <!-- 입찰공고 상세조회 -->
     <select id="retrieveBidPbancInfoDetail" parameterType="com.oke.app.bidPbanc.BidPbancVo" resultType="com.oke.app.bidPbanc.BidPbancVo">
         SELECT
-        "bidNtceNo"
-        , "bidNtceOrd"
-        , "refNtceNo"
-        , "refNtceOrd"
-        , "ppsNtceYn"
-        , "bidNtceNm"
-        , "bidNtceSttusNm"
-        , "bidNtceDate"
-        , "bidNtceBgn"
-        , "bsnsDivNm"
-        , "intrntnlBidYn"
-        , "cmmnCntrctYn"
-        , "cmmnReciptMethdNm"
-        , "elctrnBidYn"
-        , "cntrctCnclsSttusNm"
-        , "cntrctCnclsMthdNm"
-        , "bidwinrDcsnMthdNm"
-        , "ntceInsttNm"
-        , "ntceInsttCd"
-        , "ntceInsttOfclDeptNm"
-        , "ntceInsttOfclNm"
-        , "ntceInsttOfclTel"
-        , "ntceInsttOfclEmailAdrs"
-        , "dmndInsttNm"
-        , "dmndInsttCd"
-        , "dmndInsttOfclDeptNm"
-        , "dmndInsttOfclNm"
-        , "dmndInsttOfclTel"
-        , "dmndInsttOfclEmailAdrs"
-        , "presnatnOprtnYn"
-        , "presnatnOprtnDate"
-        , "presnatnOprtnTm"
-        , "presnatnOprtnPlce"
-        , "bidPrtcptQlfctRgstClseDate"
-        , "bidPrtcptQlfctRgstClseTm"
-        , "cmmnReciptAgrmntClseDate"
-        , "cmmnReciptAgrmntClseTm"
-        , "bidBeginDate"
-        , "bidBeginTm"
-        , "bidClseDate"
-        , "bidClseTm"
-        , "opengDate"
-        , "opengTm"
-        , "opengPlce"
-        , "asignBdgtAmt"
-        , "presmptPrce"
-        , "rsrvtnPrceDcsnMthdNm"
-        , "rgnLmtYn"
-        , "prtcptPsblRgnNm"
-        , "indstrytyLmtYn"
-        , "bidprcPsblIndstrytyNm"
-        , "bidNtceUrl"
-        , "dataBssDate"
-        , "delYn"
-        , "frstRgsrId"
-        , "frstRgsrDtlDttm"
-        , "lastChngId"
-        , "lastChngDtlDttm"
+              "bidNtceNo"
+            , "bidNtceOrd"
+            , "refNtceNo"
+            , "refNtceOrd"
+            , "ppsNtceYn"
+            , "bidNtceNm"
+            , "bidNtceSttusNm"
+            , "bidNtceDate"
+            , "bidNtceBgn"
+            , "bsnsDivNm"
+            , "intrntnlBidYn"
+            , "cmmnCntrctYn"
+            , "cmmnReciptMethdNm"
+            , "elctrnBidYn"
+            , "cntrctCnclsSttusNm"
+            , "cntrctCnclsMthdNm"
+            , "bidwinrDcsnMthdNm"
+            , "ntceInsttNm"
+            , "ntceInsttCd"
+            , "ntceInsttOfclDeptNm"
+            , "ntceInsttOfclNm"
+            , "ntceInsttOfclTel"
+            , "ntceInsttOfclEmailAdrs"
+            , "dmndInsttNm"
+            , "dmndInsttCd"
+            , "dmndInsttOfclDeptNm"
+            , "dmndInsttOfclNm"
+            , "dmndInsttOfclTel"
+            , "dmndInsttOfclEmailAdrs"
+            , "presnatnOprtnYn"
+            , "presnatnOprtnDate"
+            , "presnatnOprtnTm"
+            , "presnatnOprtnPlce"
+            , "bidPrtcptQlfctRgstClseDate"
+            , "bidPrtcptQlfctRgstClseTm"
+            , "cmmnReciptAgrmntClseDate"
+            , "cmmnReciptAgrmntClseTm"
+            , "bidBeginDate"
+            , "bidBeginTm"
+            , "bidClseDate"
+            , "bidClseTm"
+            , "opengDate"
+            , "opengTm"
+            , "opengPlce"
+            , "asignBdgtAmt"
+            , "presmptPrce"
+            , "rsrvtnPrceDcsnMthdNm"
+            , "rgnLmtYn"
+            , "prtcptPsblRgnNm"
+            , "indstrytyLmtYn"
+            , "bidprcPsblIndstrytyNm"
+            , "bidNtceUrl"
+            , "dataBssDate"
+            , "delYn"
+            , "frstRgsrId"
+            , "frstRgsrDtlDttm"
+            , "lastChngId"
+            , "lastChngDtlDttm"
         FROM collectdb.bid_pbanc_info
-        <where>
-            "bidNtceNo" = #{bidNtceNo}
-            <if test="bidNtceOrd != null and bidNtceOrd != ''">
-                AND "bidNtceOrd" = #{bidNtceOrd}
-            </if>
-        </where>
-        ORDER BY "bidNtceOrd" DESC
+        WHERE "bidNtceNo" = #{bidNtceNo}
+          AND "bidNtceOrd" = #{bidNtceOrd}
         LIMIT 1
     </select>
 </mapper>

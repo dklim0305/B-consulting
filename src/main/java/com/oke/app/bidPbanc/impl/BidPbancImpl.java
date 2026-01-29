@@ -15,6 +15,7 @@ public class BidPbancImpl implements BidPbancSvc {
     @Resource(name="cmmnDao")
     CmmnAbstractDao dao;
 
+    // 입찰공고 목록갯수조회
     @Override
     public int retrieveBidPbancInfoListCnt(BidPbancVo bidPbancVo) {
         return dao.selectOne("bidPbanc.retrieveBidPbancInfoListCnt", bidPbancVo);

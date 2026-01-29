@@ -62,21 +62,36 @@
                 <tr>
                     <th>공고 업무 구분</th>
                     <td>
-                        <c:set var="bsnsDivArray" value="${paramValues.bsnsDivNm}" />
+                        <c:set var="bsnsDivArray" value="${paramValues.bsnsDivNmArray}" />
                         <label>
-                            <input type="checkbox" name="bsnsDivNm" value="물품" <c:if test="${empty bsnsDivArray or fn:contains(fn:join(bsnsDivArray, ','), '물품')}">checked</c:if> /> 물품
+                            <input type="checkbox" name="bsnsDivNmArray" value="물품" <c:if test="${empty bsnsDivArray}">checked</c:if>
+                                   <c:forEach var="item" items="${bsnsDivArray}">
+                                       <c:if test="${item == '물품'}">checked</c:if>
+                                   </c:forEach> />물품
                         </label>
                         <label>
-                            <input type="checkbox" name="bsnsDivNm" value="공사" <c:if test="${empty bsnsDivArray or fn:contains(fn:join(bsnsDivArray, ','), '공사')}">checked</c:if> />공사
+                            <input type="checkbox" name="bsnsDivNmArray" value="공사" <c:if test="${empty bsnsDivArray}">checked</c:if>
+                                    <c:forEach var="item" items="${bsnsDivArray}">
+                                        <c:if test="${item == '공사'}">checked</c:if>
+                                    </c:forEach> />공사
                         </label>
                         <label>
-                            <input type="checkbox" name="bsnsDivNm" value="용역" <c:if test="${empty bsnsDivArray or fn:contains(fn:join(bsnsDivArray, ','), '용역')}">checked</c:if> />용역
+                            <input type="checkbox" name="bsnsDivNmArray" value="용역" <c:if test="${empty bsnsDivArray}">checked</c:if>
+                                    <c:forEach var="item" items="${bsnsDivArray}">
+                                        <c:if test="${item == '용역'}">checked</c:if>
+                                    </c:forEach> />용역
                         </label>
                         <label>
-                            <input type="checkbox" name="bsnsDivNm" value="외자" <c:if test="${empty bsnsDivArray or fn:contains(fn:join(bsnsDivArray, ','), '외자')}">checked</c:if> />외자
+                            <input type="checkbox" name="bsnsDivNmArray" value="외자" <c:if test="${empty bsnsDivArray}">checked</c:if>
+                                    <c:forEach var="item" items="${bsnsDivArray}">
+                                        <c:if test="${item == '외자'}">checked</c:if>
+                                    </c:forEach> />외자
                         </label>
                         <label>
-                            <input type="checkbox" name="bsnsDivNm" value="기타" <c:if test="${empty bsnsDivArray or fn:contains(fn:join(bsnsDivArray, ','), '기타')}">checked</c:if> />기타
+                            <input type="checkbox" name="bsnsDivNmArray" value="기타" <c:if test="${empty bsnsDivArray}">checked</c:if>
+                                    <c:forEach var="item" items="${bsnsDivArray}">
+                                        <c:if test="${item == '기타'}">checked</c:if>
+                                    </c:forEach> />기타
                         </label>
                     </td>
                     <th>공고기관명</th>
@@ -90,40 +105,72 @@
                 <tr>
                     <th>계약 방법</th>
                     <td>
-                        <c:set var="cntrctArray" value="${paramValues.cntrctCnclsMthdNm}" />
+                        <c:set var="cntrctArray" value="${paramValues.cntrctCnclsMthdNmArray}" />
+
                         <label>
-                            <input type="checkbox" name="cntrctCnclsMthdNm" value="일반경쟁" <c:if test="${empty cntrctArray or fn:contains(fn:join(cntrctArray, ','), '일반경쟁')}">checked</c:if> />일반경쟁
+                            <input type="checkbox" name="cntrctCnclsMthdNmArray" value="일반경쟁" <c:if test="${empty cntrctArray}">checked</c:if>
+                                    <c:forEach var="item" items="${cntrctArray}">
+                                        <c:if test="${item == '일반경쟁'}">checked</c:if>
+                                    </c:forEach> />일반경쟁
                         </label>
                         <label>
-                            <input type="checkbox" name="cntrctCnclsMthdNm" value="제한경쟁" <c:if test="${empty cntrctArray or fn:contains(fn:join(cntrctArray, ','), '제한경쟁')}">checked</c:if> />제한경쟁
+                            <input type="checkbox" name="cntrctCnclsMthdNmArray" value="제한경쟁" <c:if test="${empty cntrctArray}">checked</c:if>
+                                    <c:forEach var="item" items="${cntrctArray}">
+                                        <c:if test="${item == '제한경쟁'}">checked</c:if>
+                                    </c:forEach> />제한경쟁
                         </label>
                         <label>
-                            <input type="checkbox" name="cntrctCnclsMthdNm" value="지명경쟁" <c:if test="${empty cntrctArray or fn:contains(fn:join(cntrctArray, ','), '지명경쟁')}">checked</c:if> />지명경쟁
+                            <input type="checkbox" name="cntrctCnclsMthdNmArray" value="지명경쟁" <c:if test="${empty cntrctArray}">checked</c:if>
+                                    <c:forEach var="item" items="${cntrctArray}">
+                                        <c:if test="${item == '지명경쟁'}">checked</c:if>
+                                    </c:forEach> />지명경쟁
                         </label>
                         <label>
-                            <input type="checkbox" name="cntrctCnclsMthdNm" value="수의계약" <c:if test="${empty cntrctArray or fn:contains(fn:join(cntrctArray, ','), '수의계약')}">checked</c:if> />수의계약
+                            <input type="checkbox" name="cntrctCnclsMthdNmArray" value="수의계약" <c:if test="${empty cntrctArray}">checked</c:if>
+                                    <c:forEach var="item" items="${cntrctArray}">
+                                        <c:if test="${item == '수의계약'}">checked</c:if>
+                                    </c:forEach> />수의계약
                         </label>
                         <label>
-                            <input type="checkbox" name="cntrctCnclsMthdNm" value="기타" <c:if test="${empty cntrctArray or fn:contains(fn:join(cntrctArray, ','), '기타')}">checked</c:if> />기타
+                            <input type="checkbox" name="cntrctCnclsMthdNmArray" value="기타" <c:if test="${empty cntrctArray}">checked</c:if>
+                                    <c:forEach var="item" items="${cntrctArray}">
+                                        <c:if test="${item == '기타'}">checked</c:if>
+                                    </c:forEach> />기타
                         </label>
                     </td>
                     <th>상태 분류</th>
                     <td>
-                        <c:set var="sttusArray" value="${paramValues.bidNtceSttusNm}" />
+                        <c:set var="sttusArray" value="${paramValues.bidNtceSttusNmArray}" />
+
                         <label>
-                            <input type="checkbox" name="bidNtceSttusNm" value="일반공고" <c:if test="${empty sttusArray or fn:contains(fn:join(sttusArray, ','), '일반공고')}">checked</c:if> />일반공고
+                            <input type="checkbox" name="bidNtceSttusNmArray" value="일반공고" <c:if test="${empty sttusArray}">checked</c:if>
+                                    <c:forEach var="item" items="${sttusArray}">
+                                        <c:if test="${item == '일반공고'}">checked</c:if>
+                                    </c:forEach> />일반공고
                         </label>
                         <label>
-                            <input type="checkbox" name="bidNtceSttusNm" value="긴급공고" <c:if test="${empty sttusArray or fn:contains(fn:join(sttusArray, ','), '긴급공고')}">checked</c:if> />긴급공고
+                            <input type="checkbox" name="bidNtceSttusNmArray" value="긴급공고" <c:if test="${empty sttusArray}">checked</c:if>
+                                    <c:forEach var="item" items="${sttusArray}">
+                                        <c:if test="${item == '긴급공고'}">checked</c:if>
+                                    </c:forEach> />긴급공고
                         </label>
                         <label>
-                            <input type="checkbox" name="bidNtceSttusNm" value="정정공고" <c:if test="${empty sttusArray or fn:contains(fn:join(sttusArray, ','), '정정공고')}">checked</c:if> />정정공고
+                            <input type="checkbox" name="bidNtceSttusNmArray" value="정정공고" <c:if test="${empty sttusArray}">checked</c:if>
+                                    <c:forEach var="item" items="${sttusArray}">
+                                        <c:if test="${item == '정정공고'}">checked</c:if>
+                                    </c:forEach> />정정공고
                         </label>
                         <label>
-                            <input type="checkbox" name="bidNtceSttusNm" value="취소공고" <c:if test="${empty sttusArray or fn:contains(fn:join(sttusArray, ','), '취소공고')}">checked</c:if> />취소공고
+                            <input type="checkbox" name="bidNtceSttusNmArray" value="취소공고" <c:if test="${empty sttusArray}">checked</c:if>
+                                    <c:forEach var="item" items="${sttusArray}">
+                                        <c:if test="${item == '취소공고'}">checked</c:if>
+                                    </c:forEach> />취소공고
                         </label>
                         <label>
-                            <input type="checkbox" name="bidNtceSttusNm" value="재입찰공고" <c:if test="${empty sttusArray or fn:contains(fn:join(sttusArray, ','), '재입찰공고')}">checked</c:if> />재입찰공고
+                            <input type="checkbox" name="bidNtceSttusNmArray" value="재입찰공고" <c:if test="${empty sttusArray}">checked</c:if>
+                                    <c:forEach var="item" items="${sttusArray}">
+                                        <c:if test="${item == '재입찰공고'}">checked</c:if>
+                                    </c:forEach> />재입찰공고
                         </label>
                     </td>
                 </tr>
@@ -159,8 +206,7 @@
         <!-- 검색 결과 테이블 -->
         <div class="result-area">
             <!-- 검색 결과 카운트 -->
-            <div class="result-count">[검색결과 <fmt:formatNumber value="${bidPbancListCnt}" pattern="#,###" />건]</div>
-
+            <div class="result-count"> 입찰 공고 검색 [검색결과 <fmt:formatNumber value="${bidPbancListCnt}" pattern="#,###" />건]</div>
             <table class="result-table">
                 <colgroup>
                     <col style="width: 50px;">   <!-- 번호 -->
@@ -194,7 +240,7 @@
                     <c:otherwise>
                         <c:forEach var="item" items="${bidPbancVoList}" varStatus="status">
                             <tr>
-                                <td style="text-align: center;">${status.count}</td>
+                                <td style="text-align: center;">${item.rnum}</td>
                                 <td>
                                     <a href="/bidPbanc/retrieveBidPbancInfoDetail.do?bidNtceNo=${item.bidNtceNo}&bidNtceOrd=${item.bidNtceOrd}">
                                             ${item.bidNtceNo}<br/>
